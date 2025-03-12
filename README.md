@@ -2,11 +2,14 @@
 
 Roteiro para Desenvolvimento de um Projeto de NLP sem Bibliotecas Prontas
 
-👥 Equipe: 4 integrantes
-Alan de Souza Maximiano da Silva | rm557088@fiap.com.br
-Paulo Carvalho Ruiz Borba | rm554562@fiap.com.br
-Lancelot Chagas Rodrigues | rm554707@fiap.com.br
-Mizael Vieira Bezerra | rm555796@fiap.com.br
+## 👥 Equipe
+
+A equipe é composta por quatro integrantes:
+
+- **Alan de Souza Maximiano da Silva** | 📧 [rm557088@fiap.com.br](mailto:rm557088@fiap.com.br)
+- **Paulo Carvalho Ruiz Borba** | 📧 [rm554562@fiap.com.br](mailto:rm554562@fiap.com.br)
+- **Lancelot Chagas Rodrigues** | 📧 [rm554707@fiap.com.br](mailto:rm554707@fiap.com.br)
+- **Mizael Vieira Bezerra** | 📧 [rm555796@fiap.com.br](mailto:rm555796@fiap.com.br)
 
 ⸻
 
