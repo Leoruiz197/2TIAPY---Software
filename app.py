@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Configuração da página em modo escuro com um design moderno
+# Configuração da página em modo escuro e layout de duas colunas
 st.set_page_config(page_title="Processador de Frases", layout="wide")
 
 # CSS para customização
@@ -19,7 +19,6 @@ st.markdown("""
             font-size: 18px;
             border: 1px solid #444;
             width: 100%;
-            text-align: center;
         }
         .stButton>button {
             background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -34,45 +33,57 @@ st.markdown("""
             background: linear-gradient(135deg, #2575fc, #6a11cb);
             transform: scale(1.05);
         }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 60vh;
-        }
-        .title {
-            text-align: center;
-            font-size: 36px;
+        .sidebar-title {
+            font-size: 24px;
             font-weight: bold;
+            text-align: center;
+        }
+        .doc-button-container {
+            position: fixed;
+            bottom: 20px;
+            left: 10px;
+            width: 100%;
+            text-align: left;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# Título centralizado
-st.markdown("<div class='title'>📝 Processador de Frases com IA</div>", unsafe_allow_html=True)
+# Layout de duas colunas
+st.sidebar.markdown("<div class='sidebar-title'>🔎 Pesquisa</div>", unsafe_allow_html=True)
+frase = st.sidebar.text_input("Digite uma frase ou texto para análise:")
 
-# Caixa de entrada centralizada
-st.markdown("<div class='container'>", unsafe_allow_html=True)
-frase = st.text_input("", placeholder="Digite uma frase para análise...", key="frase")
-st.markdown("</div>", unsafe_allow_html=True)
+buscar = st.sidebar.button("🔍 Analisar")
 
-# Botões de ação centralizados
-col1, col2, col3 = st.columns([1,2,1])
-with col2:
-    buscar = st.button("🔍 Analisar")
+# Botão de documentação fixado na parte inferior e mais à esquerda
+st.sidebar.markdown("""
+    <div class='doc-button-container'>
+        <a href="https://github.com/alansms/2TIAPY-GRUPO-01-Software" target="_blank">
+            <button style='background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; border-radius: 20px; padding: 12px 25px; font-size: 18px; border: none; transition: 0.3s;'>📄 Documentação</button>
+        </a>
+    </div>
+""", unsafe_allow_html=True)
 
-# Exibição de resultados estilizada
+# Painel principal
+st.title("📊 Resultados da Análise")
+
 if buscar and frase:
-    st.markdown("---")
-    st.subheader("📌 Entrada")
-    st.write(f"**Frase original:** {frase}")
-    
+    # Estatísticas básicas
+    num_letras = len(frase.replace(" ", ""))
+    num_palavras = len(frase.split())
+    num_frases = frase.count(".") + frase.count("!") + frase.count("?")
+
+    st.markdown("### 📌 Estatísticas da frase")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Letras", num_letras)
+    col2.metric("Palavras", num_palavras)
+    col3.metric("Frases", num_frases)
+
+    # Seções de processamento
     with st.expander("🔹 Tokenização e Pré-processamento"):
         st.write("(Aqui aparecerá o resultado do módulo de tokenização do Paulo)")
-    
+
     with st.expander("🔹 Análise Sintática"):
         st.write("(Aqui aparecerá a classificação gramatical e estrutura sintática do Mizael)")
-    
+
     with st.expander("🔹 Armazenamento e Recuperação"):
         st.write("(Aqui aparecerá o status do armazenamento do Lancelot)")
