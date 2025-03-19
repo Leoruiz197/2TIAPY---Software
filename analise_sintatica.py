@@ -1,18 +1,20 @@
-import nltk
+import sqlite3
 
-nltk.download('averaged_perceptron_tagger')
-nltk.download('floresta')
+DB_NAME = "processador_frases.db"
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import floresta
+def buscar_tipo_palavra(palavra):
+    """Busca o tipo da palavra no banco de dados"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
 
-# Treinar um modelo de etiquetagem baseado no corpus Floresta
-tagger = nltk.UnigramTagger(floresta.tagged_sents())
+    cursor.execute("SELECT tipo FROM palavras WHERE palavra = ?", (palavra.lower(),))
+    resultado = cursor.fetchone()
 
+    conn.close()
+    return resultado[0] if resultado else "outro"
 
 def analisar_sintaxe(tokens):
-    """Classifica as palavras e identifica a estrutura sintática"""
-    tags = tagger.tag(tokens)
+    """Classifica palavras dinamicamente com base no banco de dados"""
     estrutura = {
         "sujeito": [],
         "verbo": [],
@@ -20,24 +22,16 @@ def analisar_sintaxe(tokens):
         "outros": []
     }
 
-    for palavra, tag in tags:
-        if not palavra:
-            continue
-        if tag and tag.startswith('N'):  # Substantivo
+    for palavra in tokens:
+        tipo = buscar_tipo_palavra(palavra)
+
+        if tipo == "substantivo":
             estrutura["sujeito"].append(palavra)
-        elif tag and tag.startswith('V'):  # Verbo
+        elif tipo == "verbo":
             estrutura["verbo"].append(palavra)
-        elif tag and tag.startswith('A'):  # Adjetivo
+        elif tipo == "adjetivo":
             estrutura["complemento"].append(palavra)
         else:
             estrutura["outros"].append(palavra)
 
     return estrutura
-
-
-if __name__ == "__main__":
-    frase = "O cachorro corre rápido pelo parque."
-    tokens = word_tokenize(frase, language="portuguese")
-    analise = analisar_sintaxe(tokens)
-
-    print("Análise Sintática:", analise)
