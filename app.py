@@ -1,5 +1,9 @@
 import streamlit as st
 
+from tokenizacao import processar_texto
+from analise_sintatica import analisar_sintaxe
+from armazenamento import inserir_frase, recuperar_frases
+
 # Configuração da página em modo escuro e layout de duas colunas
 st.set_page_config(page_title="Processador de Frases", layout="wide")
 
@@ -67,9 +71,16 @@ st.sidebar.markdown("""
 st.title("📊 Resultados da Análise")
 
 if buscar and frase:
+    # Executando as etapas do processamento
+    tokens_processados = processar_texto(frase)
+    analise_sintatica = analisar_sintaxe(tokens_processados)
+
+    # Armazenando no banco de dados
+    inserir_frase(frase, " ".join(tokens_processados), "|".join(tokens_processados), str(analise_sintatica))
+
     # Estatísticas básicas
     num_letras = len(frase.replace(" ", ""))
-    num_palavras = len(frase.split())
+    num_palavras = len(tokens_processados)
     num_frases = frase.count(".") + frase.count("!") + frase.count("?")
 
     st.markdown("### 📌 Estatísticas da frase")
@@ -80,10 +91,11 @@ if buscar and frase:
 
     # Seções de processamento
     with st.expander("🔹 Tokenização e Pré-processamento"):
-        st.write("(Aqui aparecerá o resultado do módulo de tokenização do Paulo)")
+        st.write("Tokens:", tokens_processados)
 
     with st.expander("🔹 Análise Sintática"):
-        st.write("(Aqui aparecerá a classificação gramatical e estrutura sintática do Mizael)")
+        st.write("Estrutura Sintática:", analise_sintatica)
 
     with st.expander("🔹 Armazenamento e Recuperação"):
-        st.write("(Aqui aparecerá o status do armazenamento do Lancelot)")
+        frases_armazenadas = recuperar_frases()
+        st.write("Frases salvas no banco de dados:", frases_armazenadas)
