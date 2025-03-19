@@ -1,4 +1,5 @@
 import streamlit as st
+
 from tokenizacao import processar_texto
 from analise_sintatica import analisar_sintaxe
 from armazenamento import inserir_frase, recuperar_frases
